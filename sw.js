@@ -1,6 +1,6 @@
 // Service worker: permite usar la app sin conexión.
 // Cambia la versión cada vez que subas cambios para que los iPhone la actualicen.
-const CACHE = 'cantes-v2';
+const CACHE = 'cantes-v3';
 const FILES = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

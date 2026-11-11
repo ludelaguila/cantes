@@ -307,35 +307,23 @@ function render(){
 /* =========================================================
    Inicio: lista de alumnos
    ========================================================= */
-function examBadge(st){
-  if(!st.examen?.fecha) return '';
-  const d = daysUntil(st.examen.fecha);
-  if(d < 0) return '';
-  const cls = d <= 15 ? 'coral' : d <= 45 ? 'peach' : 'mint';
-  return `<span class="badge ${cls}">${d===0?'¡Examen hoy! 🎯':d===1?'Examen mañana':'⏳ '+d+' días'}</span>`;
-}
 function lastSession(st){ return [...st.sessions].sort((a,b)=>b.fecha.localeCompare(a.fecha))[0]; }
 
 function renderHome(){
   const sts = [...S.students].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
-  const proximos = S.students.filter(s=>s.examen?.fecha && daysUntil(s.examen.fecha)>=0)
-    .sort((a,b)=>a.examen.fecha.localeCompare(b.examen.fecha));
   const hoy = new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
   $('#app').innerHTML = `
     <header class="top"><div class="row">
       <div style="flex:1"><h1 class="brand">Cantes ⚖️</h1><div class="hello">Hoy es ${hoy}</div></div>
       <button class="btn" id="add">＋ Alumno</button>
     </div></header>
-    ${proximos.length ? `<div class="card t-peach"><h2>${ic('📅')}Próximos exámenes</h2>
-      ${proximos.map(s=>`<div class="between" style="padding:5px 0"><span class="row"><span class="avatar" style="width:30px;height:30px;border-radius:10px;font-size:12px;background:${s.color}">${esc(initials(s.nombre))}</span><b>${esc(s.nombre)}</b> <span class="muted small">${fmtDateShort(s.examen.fecha)}</span></span>${examBadge(s)}</div>`).join('')}
-    </div>` : ''}
     ${sts.length ? sts.map(s=>{
       const ls = lastSession(s);
-      const sub = [s.vuelta?.numero ? `🔄 Vuelta ${esc(s.vuelta.numero)}` : '', ls ? `Último cante: ${fmtDateShort(ls.fecha)}` : 'Sin cantes todavía'].filter(Boolean).join(' · ');
+      const sub = ls ? `🎤 Último cante: ${fmtDateShort(ls.fecha)}` : 'Sin cantes todavía';
       return `<div class="stu" data-id="${s.id}" style="--c:${s.color}">
         <div class="avatar" style="background:${s.color}">${esc(initials(s.nombre))}</div>
         <div class="grow"><div class="title">${esc(s.nombre)}</div><div class="sub">${sub}</div>
-        ${examBadge(s) ? `<div style="margin-top:4px">${examBadge(s)}</div>`:''}</div>
+        ${s.dias ? `<div class="sub">🗓️ ${esc(s.dias)}</div>`:''}</div>
         <span class="chev">›</span></div>`;}).join('')
       : `<div class="card t-lav empty"><span class="emo">🌸</span><p style="font-weight:700">Aún no hay alumnos.<br>Pulsa <b>＋ Alumno</b> para empezar.</p></div>`}
     <div class="card t-sky"><h2>${ic('💾')}Copia de seguridad</h2>
@@ -387,7 +375,7 @@ function closeModal(){ $('#modal').innerHTML=''; }
 
 function studentModal(st){
   const isNew = !st;
-  st = st || { id: uid(), nombre:'', color: COLORS[S.students.length % COLORS.length], sessions: [], examen:{}, vuelta:{} };
+  st = st || { id: uid(), nombre:'', color: COLORS[S.students.length % COLORS.length], sessions: [] };
   let color = st.color;
   const m = openModal(`
     <div class="between"><h3>${isNew?'🌷 Nuevo alumno':'✏️ Editar alumno'}</h3><button class="btn ghost" id="mx">Cerrar</button></div>
@@ -405,7 +393,7 @@ function studentModal(st){
   m.querySelectorAll('.colors button').forEach(b => b.onclick = () => {
     color = b.dataset.c; m.querySelectorAll('.colors button').forEach(x=>x.classList.toggle('on', x===b)); });
   $('#mx').onclick = closeModal;
-  if(isNew) setTimeout(()=>$('#mn').focus(), 50);
+  if(isNew) setTimeout(()=>$('#mn')?.focus(), 50);
   $('#ms').onclick = () => {
     const n = $('#mn').value.trim(); if(!n){ $('#mn').focus(); return; }
     st.nombre = n; st.color = color; st.dias = $('#md').value.trim(); st.notas = $('#mo').value.trim();
@@ -421,72 +409,18 @@ function studentModal(st){
   };
 }
 
-function examModal(st){
-  const e = st.examen || {}, v = st.vuelta || {};
-  openModal(`
-    <div class="between"><h3>📅 Examen y vuelta</h3><button class="btn ghost" id="mx">Cerrar</button></div>
-    <div class="card t-pink" style="box-shadow:none;margin-top:6px">
-      <h2>${ic('🎯')}Examen</h2>
-      <label class="f" style="margin-top:0">Fecha del examen</label>
-      <input type="date" id="ef" value="${esc(e.fecha||'')}">
-      <label class="f">Detalles <span class="muted">(opcional)</span></label>
-      <input id="ed" value="${esc(e.detalle||'')}" placeholder="Ej: Primer ejercicio oral · Tribunal 3">
-      <button class="btn ghost" id="eclr" style="padding-left:0;font-weight:700">✕ Quitar fecha de examen</button>
-    </div>
-    <div class="card t-mint" style="box-shadow:none">
-      <h2>${ic('🔄')}Vuelta de temas</h2>
-      <div class="grid2">
-        <div><label class="f" style="margin-top:0">Nº de vuelta</label><input id="vn" inputmode="numeric" value="${esc(v.numero||'')}" placeholder="Ej: 3"></div>
-        <div><label class="f" style="margin-top:0">Temas por cante</label><input id="vr" value="${esc(v.ritmo||'')}" placeholder="Ej: 20 temas"></div>
-        <div><label class="f">Inicio de la vuelta</label><input type="date" id="vi" value="${esc(v.inicio||'')}"></div>
-        <div><label class="f">Fin previsto</label><input type="date" id="vfin" value="${esc(v.fin||'')}"></div>
-      </div>
-      <label class="f">Temas totales del temario <span class="muted">(opcional)</span></label>
-      <input id="vt" inputmode="numeric" value="${esc(v.total||'')}" placeholder="Ej: 330">
-      <label class="f">Organización de la vuelta</label>
-      <textarea id="vo" placeholder="Ej: Semana 1: Civil 1-40 · Semana 2: Penal 1-35 …">${esc(v.plan||'')}</textarea>
-    </div>
-    <button class="btn block" id="ms">Guardar</button>
-  `);
-  $('#mx').onclick = closeModal;
-  $('#eclr').onclick = () => { $('#ef').value=''; $('#ed').value=''; };
-  $('#ms').onclick = () => {
-    st.examen = { fecha: $('#ef').value, detalle: $('#ed').value.trim() };
-    st.vuelta = { numero: $('#vn').value.trim(), ritmo: $('#vr').value.trim(), inicio: $('#vi').value, fin: $('#vfin').value,
-                  total: $('#vt').value.trim(), plan: $('#vo').value.trim() };
-    save(); render(); toast('Guardado ✨');
-  };
-}
-
 /* =========================================================
    Ficha del alumno
    ========================================================= */
 function renderStudent(id){
   const st = getStudent(id);
   const ses = [...st.sessions].sort((a,b)=>b.fecha.localeCompare(a.fecha) || (b.creado||0)-(a.creado||0));
-  const e = st.examen || {}, v = st.vuelta || {};
   const allCantes = st.sessions.flatMap(s=>s.cantes);
   const timed = allCantes.filter(c=>c.segundos>0);
   const avg = timed.length ? timed.reduce((a,c)=>a+c.segundos,0)/timed.length : 0;
 
   const counts = {}; allCantes.forEach(c => counts[c.tema] = (counts[c.tema]||0)+1);
   const temasK = Object.keys(counts).sort(natSort);
-
-  let examHtml;
-  if(e.fecha){
-    const d = daysUntil(e.fecha);
-    examHtml = `<div class="between"><div><div class="big">${d<0?'Examen pasado':d===0?'¡Hoy! 🍀':d+' días'}</div>
-      <div class="muted small" style="font-weight:600">${fmtDate(e.fecha)}${e.detalle?' · '+esc(e.detalle):''}</div></div>
-      <div style="font-size:40px">${d<0?'✅':d<=15?'🔥':d<=45?'⏳':'🗓️'}</div></div>`;
-  } else examHtml = `<div class="muted" style="font-weight:600">Sin examen próximo · pulsa para añadirlo</div>`;
-
-  let vueltaProg = '';
-  if(v.inicio && v.fin){
-    const tot = daysUntil(v.fin) - daysUntil(v.inicio), done = -daysUntil(v.inicio);
-    const pct = tot>0 ? Math.min(100, Math.max(0, done/tot*100)) : 0;
-    vueltaProg = `<div class="between small" style="margin-top:10px;font-weight:700"><span>${fmtDateShort(v.inicio)} → ${fmtDateShort(v.fin)}</span><span>${Math.round(pct)}%</span></div>
-      <div class="bar"><div style="width:${pct}%"></div></div>`;
-  }
 
   $('#app').innerHTML = `
     <header class="top"><div class="row">
@@ -498,17 +432,6 @@ function renderStudent(id){
     </header>
     ${st.notas ? `<div class="card t-lemon small" style="white-space:pre-wrap">📌 ${esc(st.notas)}</div>`:''}
     <button class="btn block mega" id="nuevo" style="margin-top:10px">🎤 Nuevo cante (hoy)</button>
-    <div class="card t-pink" id="exam" style="cursor:pointer">
-      <div class="between"><h2>${ic('🎯')}Examen</h2><span class="muted small" style="font-weight:700">Editar ›</span></div>${examHtml}
-    </div>
-    <div class="card t-mint" id="vuelta" style="cursor:pointer">
-      <div class="between"><h2>${ic('🔄')}Vuelta de temas</h2><span class="muted small" style="font-weight:700">Editar ›</span></div>
-      ${v.numero||v.ritmo||v.plan ? `
-        <div class="row" style="flex-wrap:wrap;gap:6px">${v.numero?`<span class="badge lemon">Vuelta ${esc(v.numero)}</span>`:''}${v.ritmo?`<span class="badge sky">${esc(v.ritmo)} por cante</span>`:''}${v.total?`<span class="badge pink">${esc(v.total)} temas</span>`:''}</div>
-        ${vueltaProg}
-        ${v.plan?`<div class="small" style="white-space:pre-wrap;margin-top:10px;font-weight:600">${esc(v.plan)}</div>`:''}`
-        : `<div class="muted" style="font-weight:600">Sin organizar · pulsa para indicar cómo lleva la vuelta</div>`}
-    </div>
     ${allCantes.length ? `<div class="card"><h2>${ic('📊')}Resumen</h2><div class="kpis">
       <div style="background:var(--lilac)"><b>${st.sessions.length}</b><span>sesiones</span></div>
       <div style="background:var(--peach)"><b>${allCantes.length}</b><span>temas cantados</span></div>
@@ -529,7 +452,6 @@ function renderStudent(id){
   `;
   $('#bk').onclick = () => go('/');
   $('#ed').onclick = () => studentModal(st);
-  $('#exam').onclick = $('#vuelta').onclick = () => examModal(st);
   $('#nuevo').onclick = () => {
     const se = { id: uid(), fecha: todayISO(), creado: Date.now(), temas: [], temasTexto: '', cantes: [], notas: '' };
     st.sessions.push(se); save(); go(`/a/${st.id}/s/${se.id}`);
