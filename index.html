@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cantes</title>
+<meta name="theme-color" content="#f6efff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1d1830" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cantes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* paleta pastel */
+  --pink:#ffc8dd; --rose:#ffafcc; --lilac:#cdb4ff; --lav:#e2d4ff; --sky:#a9d6ff; --baby:#cfe8ff;
+  --mint:#b5f2d0; --lemon:#fff3a8; --peach:#ffd6a5; --coral:#ffadad;
+  --ink:#3a2e5c;            /* texto oscuro sobre pastel */
+  --bg1:#fff3f8; --bg2:#f3edff; --bg3:#e9f6ff;
+  --card:#ffffff; --text:#3a2e5c; --muted:#8a80a8; --line:#eee8f8;
+  --tw:42%;                 /* intensidad de los tintes de tarjeta */
+  --shadow:0 8px 24px rgba(140,110,200,.13);
+  --radius:22px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg1:#1d1830; --bg2:#1b1d36; --bg3:#142235;
+    --card:#2a2342; --text:#f4efff; --muted:#b5abd4; --line:#3a3258; --tw:20%;
+    --shadow:0 8px 24px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg2)}
+body{margin:0;min-height:100vh;color:var(--text);
+  background:linear-gradient(165deg,var(--bg1) 0%,var(--bg2) 45%,var(--bg3) 100%) fixed;
+  font:16px/1.45 "Nunito",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 28px)}
+/* burbujas decorativas de fondo */
+body::before,body::after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(40px);opacity:.55;pointer-events:none}
+body::before{width:260px;height:260px;background:var(--pink);top:-60px;right:-80px}
+body::after{width:300px;height:300px;background:var(--sky);bottom:-90px;left:-110px}
+@media (prefers-color-scheme: dark){ body::before,body::after{opacity:.18} }
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:5;padding:12px 0 10px;
+  background:color-mix(in srgb,var(--bg2) 75%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+header.top .row{display:flex;align-items:center;gap:10px;min-height:42px}
+h1{margin:0;font-weight:900;letter-spacing:-.02em}
+.brand{font-size:34px;flex:1;background:linear-gradient(90deg,#b07cff,#ff7eb3 55%,#ffa66b);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hello{color:var(--muted);font-weight:600;font-size:14px;margin-top:-2px}
+h1.small{font-size:22px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.back{background:color-mix(in srgb,var(--lav) 60%,var(--card));border:0;color:var(--ink);font:inherit;font-weight:700;
+  font-size:15px;padding:7px 14px;border-radius:999px;cursor:pointer}
+@media (prefers-color-scheme: dark){ .back{background:var(--card);color:var(--text)} }
+button{font:inherit}
+.btn{border:0;border-radius:16px;padding:12px 18px;font-weight:800;cursor:pointer;color:var(--ink);
+  background:linear-gradient(135deg,var(--lilac),var(--rose));box-shadow:0 6px 16px rgba(190,140,230,.35);
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s}
+.btn:active{transform:scale(.96)}
+.btn.soft{background:var(--card);box-shadow:0 3px 10px rgba(140,110,200,.15);color:var(--text)}
+.btn.mint{background:linear-gradient(135deg,var(--mint),#9be7ff)}
+.btn.peach{background:linear-gradient(135deg,var(--lemon),var(--peach))}
+.btn.ghost{background:transparent;box-shadow:none;color:var(--text);padding:8px 10px}
+.btn.danger{background:color-mix(in srgb,var(--coral) 45%,var(--card));box-shadow:none}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45}
+.btn.mega{padding:18px;font-size:20px;border-radius:22px;
+  background:linear-gradient(120deg,var(--peach),var(--rose),var(--lilac),var(--sky));background-size:250% 100%;
+  animation:shimmer 6s ease infinite}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.card{background:var(--card);border-radius:var(--radius);padding:16px 18px;margin:14px 0;box-shadow:var(--shadow)}
+.card h2{font-size:15px;margin:0 0 10px;font-weight:800;display:flex;align-items:center;gap:8px}
+.card h2 .ic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-size:16px;background:var(--card)}
+.t-pink{background:color-mix(in srgb,var(--pink) var(--tw),var(--card))}
+.t-lav{background:color-mix(in srgb,var(--lilac) var(--tw),var(--card))}
+.t-sky{background:color-mix(in srgb,var(--sky) var(--tw),var(--card))}
+.t-mint{background:color-mix(in srgb,var(--mint) var(--tw),var(--card))}
+.t-lemon{background:color-mix(in srgb,var(--lemon) var(--tw),var(--card))}
+.t-peach{background:color-mix(in srgb,var(--peach) var(--tw),var(--card))}
+.muted{color:var(--muted)} .small{font-size:14px}
+.empty{text-align:center;color:var(--muted);padding:28px 16px}
+.empty .emo{font-size:56px;display:block;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+/* tarjetas de alumno */
+.stu{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--radius);margin:12px 0;cursor:pointer;
+  box-shadow:var(--shadow);background:color-mix(in srgb,var(--c) var(--tw),var(--card));transition:transform .12s;position:relative;overflow:hidden}
+.stu:active{transform:scale(.98)}
+.stu::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:var(--c);opacity:.35}
+.stu .grow{flex:1;min-width:0;position:relative;z-index:1}
+.stu .title{font-weight:800;font-size:17px}
+.stu .sub{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{font-size:22px;color:var(--muted);position:relative;z-index:1}
+.avatar{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;color:var(--ink);font-weight:900;flex:none;
+  font-size:17px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08);position:relative;z-index:1}
+.badge{display:inline-block;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;white-space:nowrap;color:var(--ink);background:var(--lav);box-shadow:0 0 0 2px color-mix(in srgb,var(--card) 80%,transparent)}
+.badge.mint{background:var(--mint)} .badge.lemon{background:var(--lemon)} .badge.peach{background:var(--peach)}
+.badge.coral{background:var(--coral)} .badge.sky{background:var(--sky)} .badge.pink{background:var(--pink)}
+.item{display:flex;align-items:center;gap:12px;padding:12px;margin:8px -4px;border-radius:16px;cursor:pointer;background:color-mix(in srgb,var(--card) 70%,transparent)}
+.item .grow{flex:1;min-width:0}
+.item .title{font-weight:800}
+.item .sub{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{width:12px;height:42px;border-radius:6px;flex:none}
+label.f{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px;font-weight:800}
+input,textarea,select{width:100%;font:inherit;font-size:16px;color:var(--text);background:color-mix(in srgb,var(--card) 80%,transparent);
+  border:2px solid var(--line);border-radius:14px;padding:10px 12px;outline:none;transition:border-color .15s}
+input:focus,textarea:focus{border-color:var(--lilac)}
+textarea{min-height:110px;resize:vertical}
+input[type=date]{min-height:46px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{border:0;color:var(--ink);border-radius:14px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:15px;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.07);transition:transform .12s}
+.chip:active{transform:scale(.92)}
+.chip:nth-child(6n+1){background:var(--pink)} .chip:nth-child(6n+2){background:var(--sky)} .chip:nth-child(6n+3){background:var(--mint)}
+.chip:nth-child(6n+4){background:var(--lemon)} .chip:nth-child(6n+5){background:var(--lilac)} .chip:nth-child(6n+6){background:var(--peach)}
+.chip .n{font-weight:600;opacity:.6;font-size:13px}
+.chip.done{opacity:.4;text-decoration:line-through}
+.chip.cur{outline:3px solid var(--ink);outline-offset:2px;opacity:1}
+@media (prefers-color-scheme: dark){ .chip.cur{outline-color:#fff} }
+/* tema sorteado */
+.picked{text-align:center;padding:4px 0;position:relative}
+.picked .lbl{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:800}
+.picked .tema{display:inline-block;margin:8px 0 4px;font-size:46px;font-weight:900;letter-spacing:-.02em;line-height:1.1;word-break:break-word;
+  color:var(--ink);padding:10px 26px;border-radius:24px;background:linear-gradient(135deg,var(--lemon),var(--peach) 50%,var(--pink));
+  box-shadow:0 10px 24px rgba(255,150,170,.35)}
+.picked .tema.pop{animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.4) rotate(-8deg)}100%{transform:scale(1) rotate(0)}}
+.spin .tema{animation:wob .14s ease-in-out infinite alternate}
+@keyframes wob{from{transform:rotate(-4deg) scale(.95)}to{transform:rotate(4deg) scale(1.02)}}
+.confetti{position:absolute;left:50%;top:55%;width:10px;height:10px;border-radius:3px;pointer-events:none;
+  animation:boom .9s ease-out forwards}
+@keyframes boom{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+/* cronómetro anillo */
+.ring{--p:0;--rc:var(--mint);width:236px;height:236px;margin:14px auto 10px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--rc) calc(var(--p)*1%), color-mix(in srgb,var(--lav) 45%,var(--card)) 0);transition:--p .25s}
+.ring.near{--rc:var(--peach)} .ring.over{--rc:var(--coral)}
+.ring-in{width:200px;height:200px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:inset 0 2px 10px rgba(140,110,200,.12)}
+.timer{font-variant-numeric:tabular-nums;font-size:54px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.ring.over .timer{color:#e0607a}
+.tstate{font-size:13px;font-weight:700;color:var(--muted);margin-top:6px}
+.tbtns{display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.seg button{border:2px solid transparent;color:var(--ink);border-radius:14px;padding:8px 4px;font-size:13px;font-weight:800;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;opacity:.55;transition:all .15s}
+.seg button span{font-size:22px}
+.seg button.on{opacity:1;border-color:var(--ink);transform:translateY(-2px)}
+@media (prefers-color-scheme: dark){ .seg button.on{border-color:#fff} }
+.row{display:flex;align-items:center;gap:8px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.big{font-size:30px;font-weight:900;line-height:1.1}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.kpis div{border-radius:18px;padding:12px 4px;color:var(--ink)}
+.kpis b{display:block;font-size:24px;font-weight:900}
+.kpis span{font-size:12px;font-weight:700;opacity:.75}
+.bar{height:10px;border-radius:6px;background:color-mix(in srgb,var(--card) 70%,transparent);overflow:hidden;margin:6px 0 4px}
+.bar > div{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--mint),var(--sky),var(--lilac))}
+.heat{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:6px}
+.heat div{border-radius:12px;text-align:center;padding:6px 0;font-size:13px;font-weight:800;color:var(--ink)}
+.heat div small{display:block;font-weight:600;font-size:11px;opacity:.7}
+.heat .c1{background:var(--mint)} .heat .c2{background:var(--lemon)} .heat .c3{background:var(--coral)}
+.modal-bg{position:fixed;inset:0;background:rgba(58,46,92,.35);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+.modal{background:var(--card);width:100%;max-width:720px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;
+  padding:18px 18px calc(env(safe-area-inset-bottom) + 22px);animation:up .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes fade{from{opacity:0}} @keyframes up{from{transform:translateY(60px);opacity:.4}}
+@media (min-width:720px){.modal-bg{align-items:center}.modal{border-radius:28px}}
+.modal h3{margin:4px 0 8px;font-size:22px;font-weight:900}
+.colors{display:flex;gap:10px;flex-wrap:wrap}
+.colors button{width:38px;height:38px;border-radius:12px;border:3px solid transparent;cursor:pointer}
+.colors button.on{border-color:var(--ink);transform:scale(1.1)}
+.cante{display:flex;align-items:center;gap:12px;padding:10px 12px;margin:8px 0;border-radius:16px;cursor:pointer;
+  background:color-mix(in srgb,var(--card) 75%,transparent)}
+.cante.on{box-shadow:0 0 0 3px var(--lilac)}
+.cante .num{min-width:44px;height:44px;padding:0 8px;border-radius:14px;display:grid;place-items:center;font-weight:900;color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%) translateY(20px);
+  background:linear-gradient(135deg,var(--mint),var(--sky));color:var(--ink);font-weight:800;padding:12px 20px;border-radius:999px;
+  font-size:14px;z-index:30;opacity:0;transition:all .25s;box-shadow:var(--shadow)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+details summary{cursor:pointer;font-weight:800;list-style:none;display:flex;align-items:center;gap:8px}
+details summary::-webkit-details-marker{display:none}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<div id="modal"></div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* =========================================================
+   Datos
+   ========================================================= */
+const KEY = 'cantes.v1';
+const TKEY = 'cantes.timer';
+const COLORS = ['#ffadad','#ffd6a5','#fff3a8','#b5f2d0','#a9f0f0','#a9d6ff','#cdb4ff','#ffc6ff'];
+const CHIPC = ['var(--pink)','var(--sky)','var(--mint)','var(--lemon)','var(--lilac)','var(--peach)'];
+const VALS = [
+  { k:'Muy bien', e:'🌟', c:'var(--mint)',  b:'mint'  },
+  { k:'Bien',     e:'👍', c:'var(--sky)',   b:'sky'   },
+  { k:'Regular',  e:'😐', c:'var(--lemon)', b:'lemon' },
+  { k:'Flojo',    e:'😬', c:'var(--coral)', b:'coral' },
+];
+const valOf = k => VALS.find(v=>v.k===k);
+
+let S = load();
+function load(){
+  try{ const d = JSON.parse(localStorage.getItem(KEY)); if(d && Array.isArray(d.students)) return d; }catch(e){}
+  return { students: [], settings: { objetivo: 15 } };
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+if(!S.settings) S.settings = { objetivo: 15 };
+// migrar colores antiguos (no pastel) a la nueva paleta
+S.students.forEach((s,i) => { if(!COLORS.includes(s.color)) s.color = COLORS[i % COLORS.length]; });
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const todayISO = () => { const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const fmtDate = iso => { if(!iso) return ''; const [y,m,d]=iso.split('-').map(Number);
+  return new Date(y,m-1,d).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); };
+const fmtDateShort = iso => { if(!iso) return ''; const [y,m,d]=iso.split('-').map(Number);
+  return new Date(y,m-1,d).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'}); };
+const daysUntil = iso => { const [y,m,d]=iso.split('-').map(Number); const t=new Date(); t.setHours(0,0,0,0);
+  return Math.round((new Date(y,m-1,d) - t)/86400000); };
+const fmtTime = s => { s=Math.max(0,Math.floor(s)); const m=Math.floor(s/60), r=s%60; return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0'); };
+const initials = n => n.trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '?';
+const natSort = (a,b) => String(a).localeCompare(String(b),'es',{numeric:true,sensitivity:'base'});
+const ic = (emo) => `<span class="ic">${emo}</span>`;
+
+function parseTemas(str){
+  const out = [];
+  String(str||'').split(/[,;\n]+/).forEach(raw => {
+    const p = raw.trim().replace(/\s*-\s*/g,'-');
+    if(!p) return;
+    let m = p.match(/^(\d+)-(\d+)$/);
+    if(m){ let a=+m[1], b=+m[2]; if(a>b) [a,b]=[b,a]; if(b-a<=300) for(let i=a;i<=b;i++) out.push(String(i)); return; }
+    if(/^\d+(\s+\d+)+$/.test(p)){ p.split(/\s+/).forEach(x=>out.push(x)); return; }
+    out.push(p);
+  });
+  return [...new Set(out)];
+}
+
+const getStudent = id => S.students.find(s => s.id === id);
+const getSession = (st, sid) => st && st.sessions.find(x => x.id === sid);
+
+function timesSung(st, tema, exceptSession){
+  let n = 0;
+  st.sessions.forEach(se => { if(se.id === exceptSession) return; se.cantes.forEach(c => { if(c.tema === tema) n++; }); });
+  return n;
+}
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),1800); }
+
+function confetti(host){
+  const cols = ['#ffadad','#ffd6a5','#fff3a8','#b5f2d0','#a9d6ff','#cdb4ff','#ffc6ff'];
+  for(let i=0;i<26;i++){
+    const d = document.createElement('i'); d.className='confetti';
+    const a = Math.random()*Math.PI*2, r = 70 + Math.random()*90;
+    d.style.background = cols[i%cols.length];
+    d.style.setProperty('--x', Math.cos(a)*r+'px'); d.style.setProperty('--y', Math.sin(a)*r - 20 +'px');
+    d.style.setProperty('--r', (Math.random()*540-270)+'deg');
+    if(i%3===0) d.style.borderRadius='50%';
+    host.appendChild(d); setTimeout(()=>d.remove(), 950);
+  }
+}
+
+/* =========================================================
+   Cronómetro (persistente aunque se cierre la app)
+   ========================================================= */
+let T = loadTimer(); // {studentId, sessionId, canteId, start:ms|null, acc:seconds}
+function loadTimer(){ try{ return JSON.parse(localStorage.getItem(TKEY)); }catch(e){ return null; } }
+function saveTimer(){ if(T) localStorage.setItem(TKEY, JSON.stringify(T)); else localStorage.removeItem(TKEY); }
+function timerSeconds(){ if(!T) return 0; return T.acc + (T.start ? (Date.now()-T.start)/1000 : 0); }
+function findCante(t){ const st=getStudent(t?.studentId); const se=getSession(st,t?.sessionId); return se && se.cantes.find(c=>c.id===t.canteId); }
+function commitTimer(){ const c=findCante(T); if(c){ c.segundos=Math.round(timerSeconds()); save(); } }
+function bindTimer(studentId, sessionId, cante){
+  if(T && T.start) { commitTimer(); }
+  T = { studentId, sessionId, canteId: cante.id, start: null, acc: cante.segundos || 0 };
+  saveTimer(); releaseWake();
+}
+let wakeLock = null;
+async function requestWake(){ try{ if('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); }catch(e){} }
+function releaseWake(){ try{ wakeLock && wakeLock.release(); }catch(e){} wakeLock=null; }
+document.addEventListener('visibilitychange', () => { if(document.visibilityState==='visible' && T && T.start) requestWake(); });
+
+setInterval(() => { if(T && T.start) paintTimer(); }, 250);
+
+/* =========================================================
+   Router
+   ========================================================= */
+window.addEventListener('hashchange', render);
+function go(h){ location.hash = h; }
+function render(){
+  closeModal();
+  window.scrollTo(0,0);
+  const parts = location.hash.replace(/^#\/?/,'').split('/').filter(Boolean);
+  if(parts[0]==='a' && getStudent(parts[1])){
+    if(parts[2]==='s' && getSession(getStudent(parts[1]), parts[3])) return renderSession(parts[1], parts[3]);
+    return renderStudent(parts[1]);
+  }
+  renderHome();
+}
+
+/* =========================================================
+   Inicio: lista de alumnos
+   ========================================================= */
+function examBadge(st){
+  if(!st.examen?.fecha) return '';
+  const d = daysUntil(st.examen.fecha);
+  if(d < 0) return '';
+  const cls = d <= 15 ? 'coral' : d <= 45 ? 'peach' : 'mint';
+  return `<span class="badge ${cls}">${d===0?'¡Examen hoy! 🎯':d===1?'Examen mañana':'⏳ '+d+' días'}</span>`;
+}
+function lastSession(st){ return [...st.sessions].sort((a,b)=>b.fecha.localeCompare(a.fecha))[0]; }
+
+function renderHome(){
+  const sts = [...S.students].sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+  const proximos = S.students.filter(s=>s.examen?.fecha && daysUntil(s.examen.fecha)>=0)
+    .sort((a,b)=>a.examen.fecha.localeCompare(b.examen.fecha));
+  const hoy = new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+  $('#app').innerHTML = `
+    <header class="top"><div class="row">
+      <div style="flex:1"><h1 class="brand">Cantes ⚖️</h1><div class="hello">Hoy es ${hoy}</div></div>
+      <button class="btn" id="add">＋ Alumno</button>
+    </div></header>
+    ${proximos.length ? `<div class="card t-peach"><h2>${ic('📅')}Próximos exámenes</h2>
+      ${proximos.map(s=>`<div class="between" style="padding:5px 0"><span class="row"><span class="avatar" style="width:30px;height:30px;border-radius:10px;font-size:12px;background:${s.color}">${esc(initials(s.nombre))}</span><b>${esc(s.nombre)}</b> <span class="muted small">${fmtDateShort(s.examen.fecha)}</span></span>${examBadge(s)}</div>`).join('')}
+    </div>` : ''}
+    ${sts.length ? sts.map(s=>{
+      const ls = lastSession(s);
+      const sub = [s.vuelta?.numero ? `🔄 Vuelta ${esc(s.vuelta.numero)}` : '', ls ? `Último cante: ${fmtDateShort(ls.fecha)}` : 'Sin cantes todavía'].filter(Boolean).join(' · ');
+      return `<div class="stu" data-id="${s.id}" style="--c:${s.color}">
+        <div class="avatar" style="background:${s.color}">${esc(initials(s.nombre))}</div>
+        <div class="grow"><div class="title">${esc(s.nombre)}</div><div class="sub">${sub}</div>
+        ${examBadge(s) ? `<div style="margin-top:4px">${examBadge(s)}</div>`:''}</div>
+        <span class="chev">›</span></div>`;}).join('')
+      : `<div class="card t-lav empty"><span class="emo">🌸</span><p style="font-weight:700">Aún no hay alumnos.<br>Pulsa <b>＋ Alumno</b> para empezar.</p></div>`}
+    <div class="card t-sky"><h2>${ic('💾')}Copia de seguridad</h2>
+      <p class="muted small" style="margin-top:0">Los datos se guardan en este dispositivo. Exporta de vez en cuando para no perderlos o para pasarlos a otro dispositivo.</p>
+      <div class="grid2"><button class="btn mint" id="exp">⬆️ Exportar</button><button class="btn peach" id="imp">⬇️ Importar</button></div>
+      <input type="file" id="impf" accept="application/json,.json" hidden>
+    </div>`;
+  $('#add').onclick = () => studentModal();
+  document.querySelectorAll('.stu[data-id]').forEach(el => el.onclick = () => go('/a/'+el.dataset.id));
+  $('#exp').onclick = exportData;
+  $('#imp').onclick = () => $('#impf').click();
+  $('#impf').onchange = importData;
+}
+
+async function exportData(){
+  if(T && T.start) commitTimer();
+  const name = `cantes-copia-${todayISO()}.json`;
+  const blob = new Blob([JSON.stringify(S,null,1)], {type:'application/json'});
+  const file = new File([blob], name, {type:'application/json'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file], title:'Copia de Cantes'}); return; }catch(e){ if(e.name==='AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+function importData(e){
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(!d || !Array.isArray(d.students)) throw 0;
+      if(!confirm(`Se reemplazarán los datos actuales por los de la copia (${d.students.length} alumnos). ¿Continuar?`)) return;
+      S = d; if(!S.settings) S.settings={objetivo:15}; T=null; saveTimer(); save(); render(); toast('Copia importada ✨');
+    }catch(err){ alert('El archivo no es una copia válida.'); }
+  };
+  r.readAsText(f);
+}
+
+/* =========================================================
+   Modales
+   ========================================================= */
+function openModal(html){
+  $('#modal').innerHTML = `<div class="modal-bg"><div class="modal">${html}</div></div>`;
+  $('#modal .modal-bg').addEventListener('click', e => { if(e.target.classList.contains('modal-bg')) closeModal(); });
+  return $('#modal .modal');
+}
+function closeModal(){ $('#modal').innerHTML=''; }
+
+function studentModal(st){
+  const isNew = !st;
+  st = st || { id: uid(), nombre:'', color: COLORS[S.students.length % COLORS.length], sessions: [], examen:{}, vuelta:{} };
+  let color = st.color;
+  const m = openModal(`
+    <div class="between"><h3>${isNew?'🌷 Nuevo alumno':'✏️ Editar alumno'}</h3><button class="btn ghost" id="mx">Cerrar</button></div>
+    <label class="f">Nombre</label><input id="mn" value="${esc(st.nombre)}" placeholder="Nombre y apellidos" autocomplete="off">
+    <label class="f">Color</label>
+    <div class="colors">${COLORS.map(c=>`<button data-c="${c}" style="background:${c}" class="${c===color?'on':''}" aria-label="color"></button>`).join('')}</div>
+    <label class="f">Días de cante <span class="muted">(opcional)</span></label>
+    <input id="md" value="${esc(st.dias||'')}" placeholder="Ej: lunes y jueves, 18:00">
+    <label class="f">Notas generales <span class="muted">(opcional)</span></label>
+    <textarea id="mo" style="min-height:70px" placeholder="Convocatoria, puntos fuertes, cosas a vigilar…">${esc(st.notas||'')}</textarea>
+    <div style="height:14px"></div>
+    <button class="btn block" id="ms">${isNew?'Añadir alumno':'Guardar'}</button>
+    ${isNew?'':`<div style="height:10px"></div><button class="btn danger block" id="mdel">🗑️ Eliminar alumno</button>`}
+  `);
+  m.querySelectorAll('.colors button').forEach(b => b.onclick = () => {
+    color = b.dataset.c; m.querySelectorAll('.colors button').forEach(x=>x.classList.toggle('on', x===b)); });
+  $('#mx').onclick = closeModal;
+  if(isNew) setTimeout(()=>$('#mn').focus(), 50);
+  $('#ms').onclick = () => {
+    const n = $('#mn').value.trim(); if(!n){ $('#mn').focus(); return; }
+    st.nombre = n; st.color = color; st.dias = $('#md').value.trim(); st.notas = $('#mo').value.trim();
+    if(isNew) S.students.push(st);
+    save(); closeModal();
+    if(isNew) go('/a/'+st.id); else render();
+  };
+  if(!isNew) $('#mdel').onclick = () => {
+    if(!confirm(`¿Eliminar a ${st.nombre} y todos sus cantes? No se puede deshacer.`)) return;
+    S.students = S.students.filter(x=>x.id!==st.id);
+    if(T?.studentId===st.id){ T=null; saveTimer(); }
+    save(); closeModal(); go('/');
+  };
+}
+
+function examModal(st){
+  const e = st.examen || {}, v = st.vuelta || {};
+  openModal(`
+    <div class="between"><h3>📅 Examen y vuelta</h3><button class="btn ghost" id="mx">Cerrar</button></div>
+    <div class="card t-pink" style="box-shadow:none;margin-top:6px">
+      <h2>${ic('🎯')}Examen</h2>
+      <label class="f" style="margin-top:0">Fecha del examen</label>
+      <input type="date" id="ef" value="${esc(e.fecha||'')}">
+      <label class="f">Detalles <span class="muted">(opcional)</span></label>
+      <input id="ed" value="${esc(e.detalle||'')}" placeholder="Ej: Primer ejercicio oral · Tribunal 3">
+      <button class="btn ghost" id="eclr" style="padding-left:0;font-weight:700">✕ Quitar fecha de examen</button>
+    </div>
+    <div class="card t-mint" style="box-shadow:none">
+      <h2>${ic('🔄')}Vuelta de temas</h2>
+      <div class="grid2">
+        <div><label class="f" style="margin-top:0">Nº de vuelta</label><input id="vn" inputmode="numeric" value="${esc(v.numero||'')}" placeholder="Ej: 3"></div>
+        <div><label class="f" style="margin-top:0">Temas por cante</label><input id="vr" value="${esc(v.ritmo||'')}" placeholder="Ej: 20 temas"></div>
+        <div><label class="f">Inicio de la vuelta</label><input type="date" id="vi" value="${esc(v.inicio||'')}"></div>
+        <div><label class="f">Fin previsto</label><input type="date" id="vfin" value="${esc(v.fin||'')}"></div>
+      </div>
+      <label class="f">Temas totales del temario <span class="muted">(opcional)</span></label>
+      <input id="vt" inputmode="numeric" value="${esc(v.total||'')}" placeholder="Ej: 330">
+      <label class="f">Organización de la vuelta</label>
+      <textarea id="vo" placeholder="Ej: Semana 1: Civil 1-40 · Semana 2: Penal 1-35 …">${esc(v.plan||'')}</textarea>
+    </div>
+    <button class="btn block" id="ms">Guardar</button>
+  `);
+  $('#mx').onclick = closeModal;
+  $('#eclr').onclick = () => { $('#ef').value=''; $('#ed').value=''; };
+  $('#ms').onclick = () => {
+    st.examen = { fecha: $('#ef').value, detalle: $('#ed').value.trim() };
+    st.vuelta = { numero: $('#vn').value.trim(), ritmo: $('#vr').value.trim(), inicio: $('#vi').value, fin: $('#vfin').value,
+                  total: $('#vt').value.trim(), plan: $('#vo').value.trim() };
+    save(); render(); toast('Guardado ✨');
+  };
+}
+
+/* =========================================================
+   Ficha del alumno
+   ========================================================= */
+function renderStudent(id){
+  const st = getStudent(id);
+  const ses = [...st.sessions].sort((a,b)=>b.fecha.localeCompare(a.fecha) || (b.creado||0)-(a.creado||0));
+  const e = st.examen || {}, v = st.vuelta || {};
+  const allCantes = st.sessions.flatMap(s=>s.cantes);
+  const timed = allCantes.filter(c=>c.segundos>0);
+  const avg = timed.length ? timed.reduce((a,c)=>a+c.segundos,0)/timed.length : 0;
+
+  const counts = {}; allCantes.forEach(c => counts[c.tema] = (counts[c.tema]||0)+1);
+  const temasK = Object.keys(counts).sort(natSort);
+
+  let examHtml;
+  if(e.fecha){
+    const d = daysUntil(e.fecha);
+    examHtml = `<div class="between"><div><div class="big">${d<0?'Examen pasado':d===0?'¡Hoy! 🍀':d+' días'}</div>
+      <div class="muted small" style="font-weight:600">${fmtDate(e.fecha)}${e.detalle?' · '+esc(e.detalle):''}</div></div>
+      <div style="font-size:40px">${d<0?'✅':d<=15?'🔥':d<=45?'⏳':'🗓️'}</div></div>`;
+  } else examHtml = `<div class="muted" style="font-weight:600">Sin examen próximo · pulsa para añadirlo</div>`;
+
+  let vueltaProg = '';
+  if(v.inicio && v.fin){
+    const tot = daysUntil(v.fin) - daysUntil(v.inicio), done = -daysUntil(v.inicio);
+    const pct = tot>0 ? Math.min(100, Math.max(0, done/tot*100)) : 0;
+    vueltaProg = `<div class="between small" style="margin-top:10px;font-weight:700"><span>${fmtDateShort(v.inicio)} → ${fmtDateShort(v.fin)}</span><span>${Math.round(pct)}%</span></div>
+      <div class="bar"><div style="width:${pct}%"></div></div>`;
+  }
+
+  $('#app').innerHTML = `
+    <header class="top"><div class="row">
+      <button class="back" id="bk">‹ Alumnos</button><div style="flex:1"></div>
+      <button class="btn soft" id="ed" style="padding:8px 14px">✏️ Editar</button>
+    </div>
+    <div class="row" style="margin-top:8px"><div class="avatar" style="background:${st.color}">${esc(initials(st.nombre))}</div>
+      <div style="min-width:0;flex:1"><h1 class="small">${esc(st.nombre)}</h1>${st.dias?`<div class="hello">🗓️ ${esc(st.dias)}</div>`:''}</div></div>
+    </header>
+    ${st.notas ? `<div class="card t-lemon small" style="white-space:pre-wrap">📌 ${esc(st.notas)}</div>`:''}
+    <button class="btn block mega" id="nuevo" style="margin-top:10px">🎤 Nuevo cante (hoy)</button>
+    <div class="card t-pink" id="exam" style="cursor:pointer">
+      <div class="between"><h2>${ic('🎯')}Examen</h2><span class="muted small" style="font-weight:700">Editar ›</span></div>${examHtml}
+    </div>
+    <div class="card t-mint" id="vuelta" style="cursor:pointer">
+      <div class="between"><h2>${ic('🔄')}Vuelta de temas</h2><span class="muted small" style="font-weight:700">Editar ›</span></div>
+      ${v.numero||v.ritmo||v.plan ? `
+        <div class="row" style="flex-wrap:wrap;gap:6px">${v.numero?`<span class="badge lemon">Vuelta ${esc(v.numero)}</span>`:''}${v.ritmo?`<span class="badge sky">${esc(v.ritmo)} por cante</span>`:''}${v.total?`<span class="badge pink">${esc(v.total)} temas</span>`:''}</div>
+        ${vueltaProg}
+        ${v.plan?`<div class="small" style="white-space:pre-wrap;margin-top:10px;font-weight:600">${esc(v.plan)}</div>`:''}`
+        : `<div class="muted" style="font-weight:600">Sin organizar · pulsa para indicar cómo lleva la vuelta</div>`}
+    </div>
+    ${allCantes.length ? `<div class="card"><h2>${ic('📊')}Resumen</h2><div class="kpis">
+      <div style="background:var(--lilac)"><b>${st.sessions.length}</b><span>sesiones</span></div>
+      <div style="background:var(--peach)"><b>${allCantes.length}</b><span>temas cantados</span></div>
+      <div style="background:var(--sky)"><b>${avg?fmtTime(avg):'–'}</b><span>tiempo medio</span></div></div></div>`:''}
+    <div class="card t-lav"><h2>${ic('📚')}Historial de cantes</h2>
+      ${ses.length ? ses.map((s,i)=>{
+        const cant = s.cantes.map(c=>`${esc(c.tema)}${c.valoracion?' '+valOf(c.valoracion).e:''}${c.segundos?` <span class="muted">(${fmtTime(c.segundos)})</span>`:''}`).join(', ');
+        return `<div class="item" data-s="${s.id}">
+          <div class="dot" style="background:${CHIPC[i%CHIPC.length]}"></div>
+          <div class="grow"><div class="title">${fmtDate(s.fecha)}</div>
+          <div class="sub">📖 Trae: ${esc(s.temas.join(', ')) || '—'}</div>
+          <div class="sub">🎤 Cantado: ${cant || '—'}</div></div><span class="chev">›</span></div>`;}).join('')
+        : `<div class="muted" style="font-weight:600">Todavía no hay cantes.</div>`}
+    </div>
+    ${temasK.length ? `<details class="card t-sky"><summary>${ic('🗺️')}Temas preguntados (${temasK.length}) <span class="muted small" style="margin-left:auto">ver ›</span></summary>
+      <p class="muted small">Veces que se le ha preguntado cada tema: 🟢 una · 🟡 dos · 🔴 tres o más.</p>
+      <div class="heat">${temasK.map(t=>`<div class="c${Math.min(3,counts[t])}">${esc(t)}<small>×${counts[t]}</small></div>`).join('')}</div></details>`:''}
+  `;
+  $('#bk').onclick = () => go('/');
+  $('#ed').onclick = () => studentModal(st);
+  $('#exam').onclick = $('#vuelta').onclick = () => examModal(st);
+  $('#nuevo').onclick = () => {
+    const se = { id: uid(), fecha: todayISO(), creado: Date.now(), temas: [], temasTexto: '', cantes: [], notas: '' };
+    st.sessions.push(se); save(); go(`/a/${st.id}/s/${se.id}`);
+  };
+  document.querySelectorAll('[data-s]').forEach(el => el.onclick = () => go(`/a/${st.id}/s/${el.dataset.s}`));
+}
+
+/* =========================================================
+   Sesión de cante
+   ========================================================= */
+let CUR = null; // {st, se, canteId}
+function renderSession(aid, sid){
+  const st = getStudent(aid), se = getSession(st, sid);
+  let canteId = (T && T.sessionId===se.id && se.cantes.some(c=>c.id===T.canteId)) ? T.canteId : (se.cantes.at(-1)?.id || null);
+  CUR = { st, se, canteId };
+  if(canteId && !(T && T.canteId===canteId)) bindTimer(st.id, se.id, se.cantes.find(c=>c.id===canteId));
+
+  $('#app').innerHTML = `
+    <header class="top"><div class="row">
+      <button class="back" id="bk">‹ ${esc(st.nombre.split(' ')[0])}</button><div style="flex:1"></div>
+      <div class="avatar" style="background:${st.color};width:36px;height:36px;border-radius:12px;font-size:13px">${esc(initials(st.nombre))}</div>
+      <button class="btn danger" id="del" style="padding:8px 12px">🗑️</button>
+    </div></header>
+    <div class="card t-sky">
+      <h2>${ic('📖')}Temas que trae</h2>
+      <input type="date" id="fecha" value="${se.fecha}">
+      <input id="temas" style="margin-top:10px" value="${esc(se.temasTexto ?? se.temas.join(', '))}" placeholder="Ej: 12, 15, 30-33 · Civil 4, Penal 22" autocomplete="off">
+      <div class="chips" id="chips"></div>
+      <p class="muted small" style="margin:10px 0 0;font-weight:600">Separa con comas. Toca un tema para elegirlo a mano. El número pequeño indica las veces que ya se le preguntó.</p>
+    </div>
+    <button class="btn block mega" id="sortear">🎲 Sortear tema</button>
+    <div class="card t-lav" id="cantecard"></div>
+    <div class="card t-lemon" id="lista"></div>
+    <div class="card t-peach"><h2>${ic('📝')}Notas generales del día</h2>
+      <textarea id="notas" placeholder="Impresión general, actitud, nervios, ritmo…">${esc(se.notas||'')}</textarea></div>
+  `;
+  $('#bk').onclick = () => { if(T && T.start) commitTimer(); go('/a/'+st.id); };
+  $('#del').onclick = () => {
+    if(!confirm('¿Borrar este día de cante?')) return;
+    st.sessions = st.sessions.filter(x=>x.id!==se.id);
+    if(T?.sessionId===se.id){ T=null; saveTimer(); releaseWake(); }
+    save(); go('/a/'+st.id);
+  };
+  $('#fecha').onchange = e => { se.fecha = e.target.value || todayISO(); save(); };
+  $('#temas').oninput = e => { se.temasTexto = e.target.value; se.temas = parseTemas(e.target.value); save(); paintChips(); };
+  $('#temas').onblur = () => { $('#temas').value = se.temas.join(', '); se.temasTexto = $('#temas').value; save(); };
+  $('#notas').oninput = e => { se.notas = e.target.value; save(); };
+  $('#sortear').onclick = sortear;
+  paintChips(); paintCante(); paintLista();
+}
+
+function paintChips(){
+  const { st, se, canteId } = CUR;
+  const done = new Set(se.cantes.map(c=>c.tema));
+  const cur = se.cantes.find(c=>c.id===canteId)?.tema;
+  $('#chips').innerHTML = se.temas.map(t => {
+    const n = timesSung(st, t, se.id);
+    return `<button class="chip ${done.has(t)?'done':''} ${t===cur?'cur':''}" data-t="${esc(t)}" title="Preguntado ${n} veces antes">${esc(t)}${n?` <span class="n">·${n}</span>`:''}</button>`;
+  }).join('');
+  $('#chips').querySelectorAll('.chip').forEach(b => b.onclick = () => {
+    if(T && T.start && !confirm('El cronómetro está en marcha. ¿Cambiar de tema?')) return;
+    addCante(b.dataset.t);
+  });
+  $('#sortear').disabled = !se.temas.length;
+}
+
+function sortear(){
+  const { se } = CUR;
+  if(!se.temas.length) return;
+  if(T && T.start && !confirm('El cronómetro está en marcha. ¿Sortear otro tema?')) return;
+  const done = new Set(se.cantes.map(c=>c.tema));
+  let pool = se.temas.filter(t=>!done.has(t));
+  if(!pool.length){ if(!confirm('Ya ha cantado todos los temas que trae. ¿Sortear entre todos de nuevo?')) return; pool = [...se.temas]; }
+  const choice = pool[Math.floor(Math.random()*pool.length)];
+  const card = $('#cantecard');
+  card.innerHTML = `<div class="picked spin"><div class="lbl">Sorteando…</div><div class="tema" id="spin">?</div></div>`;
+  card.scrollIntoView({behavior:'smooth', block:'center'});
+  $('#sortear').disabled = true;
+  let i = 0; const steps = pool.length > 1 ? 16 : 1;
+  const tick = () => {
+    const el = $('#spin'); if(!el) return;
+    if(i++ < steps){ el.textContent = pool[Math.floor(Math.random()*pool.length)]; setTimeout(tick, 50 + i*9); }
+    else { $('#sortear').disabled = false; addCante(choice, true); if(navigator.vibrate) navigator.vibrate(40); }
+  };
+  tick();
+}
+
+function addCante(tema, celebrate){
+  const { st, se } = CUR;
+  if(T && T.start){ commitTimer(); }
+  const c = { id: uid(), tema, segundos: 0, apuntes: '', valoracion: '' };
+  se.cantes.push(c); save();
+  CUR.canteId = c.id;
+  bindTimer(st.id, se.id, c);
+  paintChips(); paintCante(true); paintLista();
+  if(celebrate) confetti($('#cantecard .picked'));
+  else $('#cantecard').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function paintCante(fresh){
+  const { st, se, canteId } = CUR;
+  const c = se.cantes.find(x=>x.id===canteId);
+  const card = $('#cantecard');
+  if(!c){ card.innerHTML = `<div class="empty" style="padding:14px"><span class="emo">🎲</span><p style="font-weight:700;margin-bottom:0">Sortea un tema (o toca uno) para empezar a cronometrar.</p></div>`; return; }
+  const prev = timesSung(st, c.tema, se.id);
+  card.innerHTML = `
+    <div class="picked"><div class="lbl">Tema a cantar</div><div class="tema ${fresh?'pop':''}">${esc(c.tema)}</div>
+      <div class="muted small" style="font-weight:700">${prev ? `🔁 Preguntado ${prev} ${prev===1?'vez':'veces'} antes` : '✨ Primera vez que se le pregunta'}</div></div>
+    <div class="ring" id="ring"><div class="ring-in"><div class="timer" id="tm">00:00</div><div class="tstate" id="tst"></div></div></div>
+    <div class="tbtns">
+      <button class="btn" id="tgo">▶ Empezar</button>
+      <button class="btn soft" id="trs">↺ Reiniciar</button>
+    </div>
+    <div class="between" style="margin-top:12px">
+      <span class="small" style="font-weight:700">⏱️ Tiempo objetivo</span>
+      <div class="row"><input id="obj" type="number" inputmode="numeric" min="1" max="120" value="${S.settings.objetivo}" style="width:72px;padding:6px 8px;text-align:center;font-weight:800"><span class="muted small" style="font-weight:700">min</span></div>
+    </div>
+    <label class="f">¿Cómo ha ido?</label>
+    <div class="seg" id="val">${VALS.map(v=>`<button data-k="${v.k}" style="background:${v.c}" class="${c.valoracion===v.k?'on':''}"><span>${v.e}</span>${v.k}</button>`).join('')}</div>
+    <label class="f">✍️ Apuntes del cante</label>
+    <textarea id="ap" placeholder="Estructura, artículos citados, errores, muletillas, ritmo, silencios…">${esc(c.apuntes||'')}</textarea>
+  `;
+  $('#tgo').onclick = toggleTimer;
+  $('#trs').onclick = () => {
+    if(timerSeconds()>0 && !confirm('¿Poner el cronómetro a cero?')) return;
+    T.start = null; T.acc = 0; saveTimer(); c.segundos = 0; save(); releaseWake(); paintTimer(); paintLista();
+  };
+  $('#obj').onchange = e => { const v = Math.max(1, Math.min(120, parseInt(e.target.value)||15)); S.settings.objetivo = v; e.target.value=v; save(); paintTimer(); };
+  $('#val').querySelectorAll('button').forEach(b => b.onclick = () => {
+    c.valoracion = c.valoracion===b.dataset.k ? '' : b.dataset.k; save();
+    $('#val').querySelectorAll('button').forEach(x=>x.classList.toggle('on', x.dataset.k===c.valoracion)); paintLista(); });
+  $('#ap').oninput = e => { c.apuntes = e.target.value; save(); };
+  paintTimer();
+}
+
+function toggleTimer(){
+  if(!T) return;
+  if(T.start){ T.acc = timerSeconds(); T.start = null; commitTimer(); releaseWake(); paintLista(); }
+  else { T.start = Date.now(); requestWake(); }
+  saveTimer(); paintTimer();
+}
+
+function paintTimer(){
+  const el = $('#tm'); if(!el || !CUR || !T || T.canteId!==CUR.canteId) return;
+  const s = timerSeconds(), obj = S.settings.objetivo*60;
+  el.textContent = fmtTime(s);
+  const ring = $('#ring');
+  ring.style.setProperty('--p', Math.min(100, s/obj*100));
+  ring.classList.toggle('over', s > obj); ring.classList.toggle('near', s <= obj && s > obj-60);
+  $('#tst').textContent = s > obj ? `+${fmtTime(s-obj)} de más` : `de ${fmtTime(obj)}`;
+  const b = $('#tgo'); b.textContent = T.start ? '⏸ Pausar' : (s>0 ? '▶ Reanudar' : '▶ Empezar');
+  b.className = 'btn' + (T.start ? ' peach' : ' mint');
+}
+
+function paintLista(){
+  const { st, se, canteId } = CUR;
+  const el = $('#lista');
+  if(!se.cantes.length){ el.style.display='none'; return; }
+  el.style.display='';
+  el.innerHTML = `<h2>${ic('🎤')}Temas cantados hoy (${se.cantes.length})</h2>` + se.cantes.map((c,i) => {
+    const v = valOf(c.valoracion);
+    return `<div class="cante ${c.id===canteId?'on':''}" data-c="${c.id}">
+      <div class="num" style="background:${CHIPC[i%CHIPC.length]}">${esc(c.tema)}</div>
+      <div style="min-width:0;flex:1">
+        <div class="row" style="gap:6px"><b style="font-variant-numeric:tabular-nums">${fmtTime(c.segundos||0)}</b>${v?`<span class="badge ${v.b}">${v.e} ${v.k}</span>`:''}</div>
+        ${c.apuntes?`<div class="muted small" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.apuntes)}</div>`:''}</div>
+      <button class="btn ghost" data-x="${c.id}" style="padding:6px;opacity:.6">✕</button>
+    </div>`;}).join('');
+  el.querySelectorAll('[data-c]').forEach(row => row.onclick = e => {
+    if(e.target.dataset.x){
+      if(!confirm('¿Quitar este tema de la sesión?')) return;
+      se.cantes = se.cantes.filter(c=>c.id!==e.target.dataset.x);
+      if(T?.canteId===e.target.dataset.x){ T=null; saveTimer(); releaseWake(); }
+      if(CUR.canteId===e.target.dataset.x){ CUR.canteId = se.cantes.at(-1)?.id || null; if(CUR.canteId) bindTimer(st.id, se.id, se.cantes.at(-1)); }
+      save(); paintChips(); paintCante(); paintLista(); return;
+    }
+    if(row.dataset.c===CUR.canteId) return;
+    if(T && T.start && !confirm('El cronómetro está en marcha. ¿Cambiar a este tema?')) return;
+    CUR.canteId = row.dataset.c; bindTimer(st.id, se.id, se.cantes.find(c=>c.id===row.dataset.c));
+    paintChips(); paintCante(); paintLista();
+    $('#cantecard').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+}
+
+window.addEventListener('pagehide', () => { if(T && T.start) commitTimer(); });
+
+render();
+
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
